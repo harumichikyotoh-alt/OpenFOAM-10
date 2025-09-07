@@ -2,8 +2,8 @@ name: ABI Consistency Check
 
 on:
   push:
-    paths:
-      - abi-templates/scotch/**
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
