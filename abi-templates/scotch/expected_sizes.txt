@@ -1,0 +1,3 @@
+SCOTCH_Graph = 104
+SCOTCH_Num   = 4
+SCOTCH_Strat = 8
