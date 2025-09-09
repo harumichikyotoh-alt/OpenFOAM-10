@@ -1,0 +1,36 @@
+name: ABI Consistency Check (PETSc)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  abi-check-petsc:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install PETSc
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libpetsc-dev
+
+      - name: Run PETSc ABI checks
+        run: |
+          cd abi-templates/petsc
+          chmod +x *.sh
+          ./run-check.sh
+          ./extract-signatures.sh
+          ./compare-signatures.sh
+
+      - name: Report ABI diff
+        run: |
+          if [ -s signature-diff.txt ]; then
+            echo "ABI mismatch detected:"
+            cat signature-diff.txt
+            exit 1
+          else
+            echo "ABI signatures match. ✅"
+          fi
