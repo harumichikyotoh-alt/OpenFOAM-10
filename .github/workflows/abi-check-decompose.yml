@@ -1,0 +1,34 @@
+name: ABI Consistency Check (Decomposition)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  abi-check-decompose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: sudo apt-get install -y libscotch-dev libparmetis-dev
+
+      - name: Run ABI checks
+        run: |
+          cd abi-templates/decompose
+          chmod +x *.sh
+          ./run-check.sh
+          ./extract-signatures.sh
+          ./compare-signatures.sh
+
+      - name: Report ABI diff
+        run: |
+          if [ -s signature-diff.txt ]; then
+            echo "ABI mismatch detected:"
+            cat signature-diff.txt
+            exit 1
+          else
+            echo "ABI signatures match. ✅"
+          fi

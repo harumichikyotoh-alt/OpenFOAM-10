@@ -1,0 +1,2 @@
+Foam::decompositionMethod::New(Foam::word const&)
+Foam::decompositionMethod::decompose()
