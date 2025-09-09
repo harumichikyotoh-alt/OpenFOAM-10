@@ -8,17 +8,20 @@ on:
 jobs:
   abi-check-decompose:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install dependencies
-        run: sudo apt-get install -y libscotch-dev libparmetis-dev
+      - name: Prepare OpenFOAM headers
+        run: |
+          echo "Using source headers from repository"
+          echo "No external OpenFOAM installation required"
 
       - name: Run ABI checks
         run: |
           cd abi-templates/decompose
-          chmod +x *.sh
+          chmod +x run-check.sh extract-signatures.sh compare-signatures.sh
           ./run-check.sh
           ./extract-signatures.sh
           ./compare-signatures.sh
